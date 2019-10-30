@@ -1,9 +1,3 @@
 django
 djangorestframework
 pydub
-pyaudio
-mysql-python
-mysqlclient
-python-docx
-numpy
-baidu-aip
