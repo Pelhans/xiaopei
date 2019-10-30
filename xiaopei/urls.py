@@ -17,12 +17,9 @@ from django.conf.urls import url
 
 from .import view
 import views.pageView as pview
-import views.userView as uview
-import views.meetingView as mview
 import views.answerView as aview
 
 urlpatterns = [
     url(r'^$', pview.index),
-    url(r'^page/answer/$',pview.get_answer),
     url(r'^api/answer/get_answer$',aview.deal_question),
 ]
