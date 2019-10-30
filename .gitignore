@@ -1,0 +1,7 @@
+.idea/*
+static/txt/*.txt
+static/wav/*.wav
+static/doc/*.doc
+*.doc
+*.docx
+*.pyc
