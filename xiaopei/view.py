@@ -10,14 +10,10 @@ from datetime import datetime
 from django.core import serializers
 from .models import User, Meeting
 from django.http import FileResponse
-from pydub import AudioSegment
-import wave
 import socket
 import struct
 import io
-import pyaudio
 import json
-import os
 
 def getMeetingObject(meeting):
 	objectMeeting = {};
