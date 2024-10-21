@@ -13,13 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.urls import path, re_path
 
-from .import view
-import views.pageView as pview
-import views.answerView as aview
+from . import view
+from . import pageView as pview
+from . import answerView as aview
 
 urlpatterns = [
-    url(r'^$', pview.index),
-    url(r'^api/answer/get_answer$',aview.deal_question),
+    re_path(r'^$', pview.index),
+    path('parse_sbs_file/', view.upload_sbs_file, name='upload_sbs_file'),
 ]
+

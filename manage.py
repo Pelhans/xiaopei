@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import os
 import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
+#reload(sys)
+#sys.setdefaultencoding('utf8')
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "xiaopei.settings")
@@ -22,3 +22,4 @@ if __name__ == "__main__":
             )
         raise
     execute_from_command_line(sys.argv)
+

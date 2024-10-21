@@ -6,113 +6,64 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.http import JsonResponse
 from datetime import datetime
 from django.core import serializers
-from .models import User, Meeting
+from .models import User, Chatting
+from django.core.files.storage import FileSystemStorage
+from .forms import UploadFileForm
+from . import process_sbs_parse
 from django.http import FileResponse
 import socket
 import struct
 import io
 import json
+import os
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
-def getMeetingObject(meeting):
-	objectMeeting = {};
-	objectMeeting['id'] = meeting.id;
-	objectMeeting['meetingName'] = meeting.meetingName;
-	objectMeeting['description'] = meeting.description;
-	objectMeeting['resultType'] = meeting.resultType;
-	objectMeeting['createDate'] = meeting.createDate;
-	objectMeeting['finishDate'] = meeting.finishDate;
-	objectMeeting['userName'] = meeting.userName;
-	objectMeeting['status'] = meeting.status;
-	objectMeeting['language'] = meeting.language;
-	objectMeeting['audioType'] = meeting.audioType;
-	objectMeeting['audioBit'] = meeting.audioBit;
-	objectMeeting['resultUrl'] = meeting.resultUrl;
-	objectMeeting['audioUrl'] = meeting.audioUrl;
-	objectMeeting['audioFrequency'] = meeting.audioFrequency;
-	return objectMeeting;
+import logging
+import requests
+import time
 
-@api_view(['POST'])
-def openCreateMeeting(request):
-	result = {};
-	requestData = json.loads(request.body);
-	userName = requestData['userName'];
-	password = requestData['password'];
-	meetingName = requestData['meetingName'];
-	description = requestData['description'];
-	resultType = requestData['resultType'];
-	statusCode = judgePermission(userName, password);
-	if (statusCode != 200):
-		result['statusCode'] = statusCode;
-		result["message"] = "error";
-		return Response(result,status=status.HTTP_200_OK);
-	if (resultType != "txt"):
-		result['statusCode'] = 400;
-		result["message"] = "error resultType";
-		return Response(result,status=status.HTTP_200_OK);
-	meeting = saveMeeting(userName, meetingName, description, resultType);
-	result['meeting'] = getMeetingObject(meeting);
-	result['statusCode'] = 200;
-	result["message"] = "ok";
-	return Response(result,status=status.HTTP_200_OK);
+import hmac
+import base64
+import requests
+import time
+import json
+import re
+from hashlib import sha256
 
-@api_view(['POST'])
-def openGetAllMeetings(request):
-	result = {};
-	requestData = json.loads(request.body);
-	userName = requestData['userName'];
-	password = requestData['password'];
-	statusCode = judgePermission(userName, password);
-	if (statusCode != 200):
-		result['statusCode'] = statusCode;
-		result["message"] = "error";
-		return Response(result,status=status.HTTP_200_OK);
-	meetings = Meeting.objects.all();
-	meetingList = [];
-	for meeting in meetings:
-		meetingList.append(getMeetingObject(meeting));
-	result["meetings"] = meetingList;
-	result['statusCode'] = 200;
-	result["message"] = "ok";
-	return Response(result,status=status.HTTP_200_OK);
+from typing import Dict
+from collections import defaultdict
 
-@api_view(['POST'])
-def openGetUserAllMeetings(request):
-	result = {};
-	requestData = json.loads(request.body);
-	userName = requestData['userName'];
-	password = requestData['password'];
-	statusCode = judgePermission(userName, password);
-	if (statusCode != 200):
-		result['statusCode'] = statusCode;
-		result["message"] = "error";
-		return Response(result,status=status.HTTP_200_OK);
-	meetings = Meeting.objects.filter(userName=userName);
-	meetingList = [];
-	for meeting in meetings:
-		meetingList.append(getMeetingObject(meeting));
-	result["meetings"] = meetingList;
-	result['statusCode'] = 200;
-	result["message"] = "ok";
-	return Response(result,status=status.HTTP_200_OK);
+today = datetime.today()
 
-@api_view(['POST'])
-def openDeleteMeetings(request):
-	result = {};
-	requestData = json.loads(request.body);
-	userName = requestData['userName'];
-	password = requestData['password'];
-	statusCode = judgePermission(userName, password);
-	if (statusCode != 200):
-		result['statusCode'] = statusCode;
-		result["message"] = "error";
-		return Response(result,status=status.HTTP_200_OK);
-	meetings = Meeting.objects.all();
-	meetingList = [];
-	for meeting in meetings:
-		meetingList.append(getMeetingObject(meeting));
-	result["meetings"] = meetingList;
-	result['statusCode'] = 200;
-	result["message"] = "ok";
-	return Response(result,status=status.HTTP_200_OK);
+def home_page(request):
+    return render(request, 'homepage.html')
+
+def handle_uploaded_file(f):
+    upload_dir = 'uploads/'
+    if not os.path.exists(upload_dir):
+        os.makedirs(upload_dir)
+    file_path = os.path.join(upload_dir, f.name)
+    with open(file_path, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+    return file_path
+
+def upload_sbs_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            file_path = handle_uploaded_file(request.FILES['file'])
+            # 调用解析函数
+            parsed_file_path = process_sbs_parse.parse(file_path)
+            # parsed_file_path = file_path
+            with open(parsed_file_path, 'rb') as f:
+                response = HttpResponse(f.read(), content_type="application/octet-stream")
+                response['Content-Disposition'] = f'attachment; filename="{os.path.basename(parsed_file_path)}"'
+                return response
+    else:
+        form = UploadFileForm()
+    return render(request, 'homepage.html', {'form': form})

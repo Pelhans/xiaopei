@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import HttpResponse
-from ..models import Question
-from ..models import Question_audio
+from .models import User
+from .models import Chatting
 import os
 from datetime import datetime
 import requests
@@ -41,4 +41,5 @@ def deal_question( request ):
 
     result["statusCode"] = 200
     return Response(result,status=status.HTTP_200_OK)
+
 

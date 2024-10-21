@@ -25,17 +25,17 @@ SECRET_KEY = '8b1#ur8c+i#j9z-pk$3hu=o#=o5r$aitz$#=qtht3sk_gceuw#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [u'*',]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    #'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
+    # 'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
     'xiaopei',
@@ -45,10 +45,10 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.contrib.auth.middleware.AuthenticationMiddleware',
+    #'django.contrib.messages.middleware.MessageMiddleware',
+    #'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'xiaopei.urls'
@@ -71,20 +71,38 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'xiaopei.wsgi.application'
 
+# MIGRATION_MODULES = {
+#     "xiaopei": None,
+# }
+
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
+# 配置会话存储使用文件缓存
+SESSION_ENGINE = 'django.contrib.sessions.backends.file'
+SESSION_FILE_PATH = os.path.join(BASE_DIR, "xiaopei/datafile/")
+
+CACHES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'kg',
-        'USER': 'root',
-        'PASSWORD': 'nlp',
-        'HOST':'localhost',
-        'PORT':'3306',
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+
+# SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
+# 数据库配置为空，确保 Django 不使用数据库
+DATABASES = {}
+
+AUTHENTICATION_BACKENDS = ['xiaopei.auth_backend.SimpleBackend']
+DATABASE_ROUTERS = ['xiaopei.dbrouters.NoDBRouter']
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': ':memory:',  # 使用内存数据库，避免实际创建文件
+#     }
+# }
 
 
 # Password validation
@@ -125,4 +143,5 @@ USE_TZ = True
 
 STATIC_URL='/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+
 

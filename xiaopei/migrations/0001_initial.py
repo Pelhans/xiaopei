@@ -15,51 +15,20 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Meeting',
+            name='Chatting',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('meetingName', models.CharField(max_length=50)),
-                ('description', models.CharField(max_length=50)),
-                ('resultType', models.CharField(max_length=50)),
-                ('language', models.CharField(max_length=50)),
-                ('audioType', models.CharField(max_length=50)),
-                ('createDate', models.DateTimeField(default=django.utils.timezone.now)),
-                ('finishDate', models.DateTimeField(auto_now=True)),
-                ('audioBit', models.IntegerField()),
-                ('audioFrequency', models.IntegerField()),
-                ('userName', models.CharField(max_length=50)),
-                ('resultUrl', models.CharField(max_length=50)),
-                ('audioUrl', models.CharField(max_length=50)),
-                ('status', models.CharField(max_length=50)),
-                ('txtname', models.CharField(max_length=50)),
-                ('wavname', models.CharField(max_length=50)),
-                ('txtdate', models.DateTimeField(default=django.utils.timezone.now)),
-                ('wavdate', models.DateTimeField(default=django.utils.timezone.now)),
-            ],
-        ),
-        migrations.CreateModel(
-            name='Question',
-            fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('talkWord', models.CharField(max_length=50)),
-            ],
-        ),
-        migrations.CreateModel(
-            name='Question_audio',
-            fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('audioUrl', models.CharField(max_length=50)),
-                ('wavname', models.CharField(default=b'none', max_length=50)),
+                ('chattingName', models.CharField(max_length=50)),
+                ('historyMessage', models.CharField(max_length=32000))
             ],
         ),
         migrations.CreateModel(
             name='User',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('userName', models.CharField(max_length=50)),
-                ('password', models.CharField(max_length=50)),
-                ('position', models.CharField(max_length=50)),
-                ('email', models.CharField(max_length=50)),
+                ('age', models.CharField(max_length=50)),
+                ('sex', models.CharField(max_length=50)),
             ],
-        ),
+        )
     ]
+

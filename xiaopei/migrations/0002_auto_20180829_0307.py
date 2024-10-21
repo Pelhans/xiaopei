@@ -13,9 +13,10 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.DeleteModel(
-            name='Question',
+            name='Chatting',
         ),
         migrations.DeleteModel(
-            name='Question_audio',
+            name='User',
         ),
     ]
+

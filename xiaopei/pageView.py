@@ -6,7 +6,7 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from ..models import Question_audio
+from .models import Chatting, User
 
 def index(request):
 	data = {};
@@ -15,4 +15,5 @@ def index(request):
 	if message is None:
 		data["message"] = "ok";
 	data["message"] = message;
-	return render(request, 'answer.html', data)
+	return render(request, 'homepage.html', data)
+
