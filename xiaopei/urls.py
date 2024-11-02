@@ -16,11 +16,9 @@ Including another URLconf
 from django.urls import path, re_path
 
 from . import view
-from . import pageView as pview
-from . import answerView as aview
 
 urlpatterns = [
-    re_path(r'^$', pview.index),
-    path('parse_sbs_file/', view.upload_sbs_file, name='upload_sbs_file'),
+    path('', view.home_page, name='home_page'),
+    path('count_time', view.home_page, name='home_page'),
 ]
 

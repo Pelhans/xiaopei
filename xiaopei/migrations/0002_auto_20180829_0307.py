@@ -12,11 +12,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.DeleteModel(
-            name='Chatting',
-        ),
-        migrations.DeleteModel(
-            name='User',
-        ),
     ]
 

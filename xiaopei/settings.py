@@ -97,14 +97,6 @@ DATABASES = {}
 AUTHENTICATION_BACKENDS = ['xiaopei.auth_backend.SimpleBackend']
 DATABASE_ROUTERS = ['xiaopei.dbrouters.NoDBRouter']
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': ':memory:',  # 使用内存数据库，避免实际创建文件
-#     }
-# }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 

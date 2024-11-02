@@ -3,7 +3,6 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-import django.utils.timezone
 
 
 class Migration(migrations.Migration):
@@ -14,21 +13,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='Chatting',
-            fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('chattingName', models.CharField(max_length=50)),
-                ('historyMessage', models.CharField(max_length=32000))
-            ],
-        ),
-        migrations.CreateModel(
-            name='User',
-            fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('age', models.CharField(max_length=50)),
-                ('sex', models.CharField(max_length=50)),
-            ],
-        )
     ]
 
