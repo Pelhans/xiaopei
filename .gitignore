@@ -2,4 +2,4 @@
 *.pyc
 logs/*
 nohup.out
-xiaopei/datafile/*
+xiaopei/datafile/session*
